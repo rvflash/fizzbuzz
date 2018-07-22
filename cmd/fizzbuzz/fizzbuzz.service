@@ -1,0 +1,12 @@
+[Unit]
+Description=FizzBuzz REST API
+Documentation=https://github.com/rvflash/fizzbuzz/blob/master/README.md
+
+[Service]
+WorkingDirectory=/var/www/fizzbuzz/
+ExecStart=/var/www/fizzbuzz/fizzbuzz
+Restart=always
+RestartSec=1s
+
+[Install]
+WantedBy=default.target
