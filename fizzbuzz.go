@@ -23,20 +23,21 @@ var (
 	ErrBuzzMod = errors.New("invalid second modulo")
 )
 
-type multiples struct {
+// G represents a FizzBuzz game.
+type G struct {
 	s1, s2 string
 	m1, m2 int
 }
 
 // Default returns a default fizzbuzz with "fizz" for the first multiples of three, "buzz" for five.
 // Also returns "fizzbuzz" for multiples of fifteen.
-var Default = &multiples{s1: "fizz", s2: "buzz", m1: 3, m2: 5}
+var Default = &G{s1: "fizz", s2: "buzz", m1: 3, m2: 5}
 
 // Custom returns a new instance of fizzbuzz with personalized terms and multiples.
 // fizz will be print for multiples of m1, buzz for multiples of m2.
 // A concatenated version of fizz and buzz will be print for multiples of m1 and m2.
 // If one of the fields is invalid, an error is returned.
-func Custom(fizz, buzz string, mod1, mod2 int) (*multiples, error) {
+func Custom(fizz, buzz string, mod1, mod2 int) (*G, error) {
 	// mandatory fields
 	if fizz = strings.TrimSpace(fizz); fizz == "" {
 		return nil, ErrFizz
@@ -51,13 +52,13 @@ func Custom(fizz, buzz string, mod1, mod2 int) (*multiples, error) {
 	if mod2 < 1 {
 		return nil, ErrBuzzMod
 	}
-	return &multiples{s1: fizz, s2: buzz, m1: mod1, m2: mod2}, nil
+	return &G{s1: fizz, s2: buzz, m1: mod1, m2: mod2}, nil
 }
 
 // One applies the algorithm on the given number.
 // It returns the corresponding string value.
 // Regarding to the benchmark, it's the more faster of three method.
-func (m *multiples) One(i int) string {
+func (m *G) One(i int) string {
 	switch {
 	case i%m.m1 == 0 && i%m.m2 == 0:
 		return m.s1 + m.s2
@@ -71,7 +72,7 @@ func (m *multiples) One(i int) string {
 }
 
 // Two does the same job than One, with the same performance or almost.
-func (m *multiples) Two(i int) (s string) {
+func (m *G) Two(i int) (s string) {
 	if i%m.m1 == 0 {
 		s = m.s1
 	}
@@ -87,7 +88,7 @@ func (m *multiples) Two(i int) (s string) {
 }
 
 // Three does the same job than One, but more slower.
-func (m *multiples) Three(i int) string {
+func (m *G) Three(i int) string {
 	switch {
 	case i%(m.m1*m.m2) == 0:
 		return m.s1 + m.s2
@@ -102,7 +103,7 @@ func (m *multiples) Three(i int) string {
 
 // Bulk returns a list of "fizzbuzz" values from 1 to the given until value.
 // If until is negative or zero, a nil value is returned.
-func (m *multiples) Bulk(until int) []string {
+func (m *G) Bulk(until int) []string {
 	if until < 1 {
 		// Tooth
 		return nil
@@ -116,7 +117,7 @@ func (m *multiples) Bulk(until int) []string {
 
 // BulkTwo does the same job that Bulk with the second algorithm.
 // Redundant code assumed with the Bulk method (demo).
-func (m *multiples) BulkTwo(until int) []string {
+func (m *G) BulkTwo(until int) []string {
 	if until < 1 {
 		// Tooth
 		return nil
@@ -128,9 +129,9 @@ func (m *multiples) BulkTwo(until int) []string {
 	return res
 }
 
-// BulkTwo does the same job that Bulk with the third algorithm.
+// BulkThree does the same job that Bulk with the third algorithm.
 // Redundant code assumed with the Bulk method (demo).
-func (m *multiples) BulkThree(until int) []string {
+func (m *G) BulkThree(until int) []string {
 	if until < 1 {
 		// Tooth
 		return nil
