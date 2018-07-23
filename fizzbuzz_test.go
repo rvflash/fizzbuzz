@@ -12,14 +12,14 @@ import (
 	"github.com/rvflash/fizzbuzz"
 )
 
-func ExampleMultiples_One() {
+func ExampleG_One() {
 	fb := fizzbuzz.Default
 	fmt.Println(fb.One(3))
 	// output: fizz
 }
 
 // 20000000 - 60.1 ns/op
-func BenchmarkMultiples_One(b *testing.B) {
+func BenchmarkG_One(b *testing.B) {
 	// runs the One function b.N times with 15 as value (worst case: both multiples).
 	for n := 0; n < b.N; n++ {
 		_ = fizzbuzz.Default.One(15)
@@ -27,7 +27,7 @@ func BenchmarkMultiples_One(b *testing.B) {
 }
 
 // 20000000 - 61.9 ns/op
-func BenchmarkMultiples_Two(b *testing.B) {
+func BenchmarkG_Two(b *testing.B) {
 	// runs the One function b.N times with 15 as value (worst case: both multiples).
 	for n := 0; n < b.N; n++ {
 		_ = fizzbuzz.Default.Two(15)
@@ -35,21 +35,21 @@ func BenchmarkMultiples_Two(b *testing.B) {
 }
 
 // 30000000 - 51.5 ns/op
-func BenchmarkMultiples_Three(b *testing.B) {
+func BenchmarkG_Three(b *testing.B) {
 	// runs the One function b.N times with 15 as value (worst case: both multiples).
 	for n := 0; n < b.N; n++ {
 		_ = fizzbuzz.Default.Three(15)
 	}
 }
 
-func ExampleMultiples_Bulk() {
+func ExampleG_Bulk() {
 	fb := fizzbuzz.Default
 	fmt.Println(fb.Bulk(15))
 	// output: [1 2 fizz 4 buzz fizz 7 8 fizz buzz 11 fizz 13 14 fizzbuzz]
 }
 
 // 2000000 - 730 ns/op
-func BenchmarkMultiples_Bulk20(b *testing.B) {
+func BenchmarkG_Bulk20(b *testing.B) {
 	// runs the Bulk function b.N times with 20 as value.
 	for n := 0; n < b.N; n++ {
 		_ = fizzbuzz.Default.Bulk(20)
@@ -57,7 +57,7 @@ func BenchmarkMultiples_Bulk20(b *testing.B) {
 }
 
 // 2000000 - 773 ns/op
-func BenchmarkMultiples_BulkTwo20(b *testing.B) {
+func BenchmarkG_BulkTwo20(b *testing.B) {
 	// runs the Bulk function b.N times with 20 as value.
 	for n := 0; n < b.N; n++ {
 		_ = fizzbuzz.Default.BulkTwo(20)
@@ -65,7 +65,7 @@ func BenchmarkMultiples_BulkTwo20(b *testing.B) {
 }
 
 // 2000000 - 881 ns/op
-func BenchmarkMultiples_BulkThree20(b *testing.B) {
+func BenchmarkG_BulkThree20(b *testing.B) {
 	// runs the Bulk function b.N times with 20 as value.
 	for n := 0; n < b.N; n++ {
 		_ = fizzbuzz.Default.BulkThree(20)
@@ -73,7 +73,7 @@ func BenchmarkMultiples_BulkThree20(b *testing.B) {
 }
 
 // 300000 - 3480 ns/op
-func BenchmarkMultiples_Bulk100(b *testing.B) {
+func BenchmarkG_Bulk100(b *testing.B) {
 	// runs the Bulk function b.N times with 20 as value.
 	for n := 0; n < b.N; n++ {
 		_ = fizzbuzz.Default.Bulk(100)
@@ -81,7 +81,7 @@ func BenchmarkMultiples_Bulk100(b *testing.B) {
 }
 
 // 500000 - 4104 ns/op
-func BenchmarkMultiples_BulkTwo100(b *testing.B) {
+func BenchmarkG_BulkTwo100(b *testing.B) {
 	// runs the Bulk function b.N times with 20 as value.
 	for n := 0; n < b.N; n++ {
 		_ = fizzbuzz.Default.BulkTwo(100)
@@ -89,7 +89,7 @@ func BenchmarkMultiples_BulkTwo100(b *testing.B) {
 }
 
 // 300000 - 4186 ns/op
-func BenchmarkMultiples_BulkThree100(b *testing.B) {
+func BenchmarkG_BulkThree100(b *testing.B) {
 	// runs the Bulk function b.N times with 20 as value.
 	for n := 0; n < b.N; n++ {
 		_ = fizzbuzz.Default.BulkThree(100)
@@ -99,7 +99,7 @@ func BenchmarkMultiples_BulkThree100(b *testing.B) {
 // Expected result of the first fifteen values with the default fizzbuzz behavior.
 var exp = []string{"1", "2", "fizz", "4", "buzz", "fizz", "7", "8", "fizz", "buzz", "11", "fizz", "13", "14", "fizzbuzz"}
 
-func TestMultiples_Bulk(t *testing.T) {
+func TestG_Bulk(t *testing.T) {
 	// The first fifteen values with the default fizzbuzz behavior.
 	d := fizzbuzz.Default.Bulk(15)
 	// Checks it!
@@ -108,7 +108,7 @@ func TestMultiples_Bulk(t *testing.T) {
 	}
 }
 
-func TestMultiples_Bulk2(t *testing.T) {
+func TestG_Bulk2(t *testing.T) {
 	// Expected nil with value inferior to one.
 	d := fizzbuzz.Default.Bulk(-1)
 	// Checks it!
@@ -117,7 +117,7 @@ func TestMultiples_Bulk2(t *testing.T) {
 	}
 }
 
-func TestMultiples_BulkTwo(t *testing.T) {
+func TestG_BulkTwo(t *testing.T) {
 	// The first fifteen values with the default fizzbuzz behavior.
 	d := fizzbuzz.Default.BulkTwo(15)
 	// Checks it!
@@ -126,7 +126,7 @@ func TestMultiples_BulkTwo(t *testing.T) {
 	}
 }
 
-func TestMultiples_BulkTwo2(t *testing.T) {
+func TestG_BulkTwo2(t *testing.T) {
 	// Expected nil with value inferior to one.
 	d := fizzbuzz.Default.BulkTwo(-1)
 	// Checks it!
@@ -135,7 +135,7 @@ func TestMultiples_BulkTwo2(t *testing.T) {
 	}
 }
 
-func TestMultiples_BulkThree(t *testing.T) {
+func TestG_BulkThree(t *testing.T) {
 	// The first fifteen values with the default fizzbuzz behavior.
 	d := fizzbuzz.Default.BulkThree(15)
 	// Checks it!
@@ -144,7 +144,7 @@ func TestMultiples_BulkThree(t *testing.T) {
 	}
 }
 
-func TestMultiples_BulkThree2(t *testing.T) {
+func TestG_BulkThree2(t *testing.T) {
 	// Expected nil with value inferior to one.
 	d := fizzbuzz.Default.BulkThree(-1)
 	// Checks it!
