@@ -54,19 +54,50 @@ func Custom(fizz, buzz string, mod1, mod2 int) (*multiples, error) {
 	return &multiples{s1: fizz, s2: buzz, m1: mod1, m2: mod2}, nil
 }
 
-// Do applies the the algorithm on the given number and returns the corresponding string value.
-func (m *multiples) One(i int) (s string) {
+// One applies the algorithm on the given number.
+// It returns the corresponding string value.
+// Regarding to the benchmark, it's the more faster of three method.
+func (m *multiples) One(i int) string {
+	switch {
+	case i%m.m1 == 0 && i%m.m2 == 0:
+		return m.s1 + m.s2
+	case i%m.m1 == 0:
+		return m.s1
+	case i%m.m2 == 0:
+		return m.s2
+	default:
+		return strconv.Itoa(i)
+	}
+}
+
+// Two does the same job than One, with the same performance or almost.
+func (m *multiples) Two(i int) (s string) {
 	if i%m.m1 == 0 {
 		s = m.s1
 	}
 	if i%m.m2 == 0 {
-		// Add to the existing string is enough and avoids to do an other modulo for both value.
+		// Add to the existing string is enough.
+		// It avoids to do an other modulo with the both value.
 		s += m.s2
 	}
 	if s == "" {
 		s = strconv.Itoa(i)
 	}
 	return
+}
+
+// Three does the same job than One, but more slower.
+func (m *multiples) Three(i int) string {
+	switch {
+	case i%(m.m1*m.m2) == 0:
+		return m.s1 + m.s2
+	case i%m.m1 == 0:
+		return m.s1
+	case i%m.m2 == 0:
+		return m.s2
+	default:
+		return strconv.Itoa(i)
+	}
 }
 
 // Bulk returns a list of "fizzbuzz" values from 1 to the given until value.
@@ -79,6 +110,34 @@ func (m *multiples) Bulk(until int) []string {
 	var res = make([]string, until)
 	for i := 1; i <= until; i++ {
 		res[i-1] = m.One(i)
+	}
+	return res
+}
+
+// BulkTwo does the same job that Bulk with the second algorithm.
+// Redundant code assumed with the Bulk method (demo).
+func (m *multiples) BulkTwo(until int) []string {
+	if until < 1 {
+		// Tooth
+		return nil
+	}
+	var res = make([]string, until)
+	for i := 1; i <= until; i++ {
+		res[i-1] = m.Two(i)
+	}
+	return res
+}
+
+// BulkTwo does the same job that Bulk with the third algorithm.
+// Redundant code assumed with the Bulk method (demo).
+func (m *multiples) BulkThree(until int) []string {
+	if until < 1 {
+		// Tooth
+		return nil
+	}
+	var res = make([]string, until)
+	for i := 1; i <= until; i++ {
+		res[i-1] = m.Three(i)
 	}
 	return res
 }
