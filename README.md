@@ -58,13 +58,13 @@ And, it's a really fast alternative to build a micro-service like this one (see 
 
 * A package that exposes methods to play with FizzBuzz, with 3 different algorithms (see benchmark bellow).
 * A REST API over HTTPS to use it.
-* Continuous integration with Travis that run all lints and tests (benchmark included). 
-* Fully tested and code that passed various [linters](https://github.com/golangci/golangci-lint) (go vet, etc.)
+* Continuous integration with [Travis](https://travis-ci.org/rvflash/fizzbuzz) that run all lints and tests (benchmark included). 
+* Fully [tested](https://codecov.io/github/rvflash/fizzbuzz?branch=master) and code that passed various [linters](https://github.com/golangci/golangci-lint) (go vet, etc.)
 * A Systemd unit file to easily manage and control the service. The logs can be manipulated with Journalctl.
 * The API can recover on its own panics. Systemd will restart it for others cases (server reboot, etc).
 * The API exposes a health check as monitoring purpose.
 * Vendored dependencies with dep.
-* Semantic Versioning. The master branch, as usual with a Go project is not safe. To use in production, see the latest tag: v0.0.1.
+* Semantic Versioning. The master branch, as usual with a Go project is not safe. To use in production, see the latest tag: v0.0.2.
 
 
 ### TODO: possible improvements
@@ -87,7 +87,7 @@ $ go test -bench=.
 
 ### Benchmark
 
-> On Linux OS, the default algorithm used in API is even faster, see the Travis logs.
+> On Linux OS, the default algorithm used in API is even faster, see the [Travis logs](https://travis-ci.org/rvflash/fizzbuzz).
 
 ```
 goos: darwin
