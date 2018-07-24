@@ -64,6 +64,7 @@ And, it's a really fast alternative to build a micro-service like this one (see 
 * The API can recover on its own panics. Systemd will restart it for others cases (server reboot, etc).
 * The API exposes a health check as monitoring purpose.
 * Vendored dependencies with dep.
+* Semantic Versioning. The master branch, as usual with a Go project is not safe. To use in production, see the latest tag: v0.0.1.
 
 
 ### TODO: possible improvements
@@ -85,6 +86,9 @@ $ go test -bench=.
 ```
 
 ### Benchmark
+
+> On Linux OS, the default algorithm used in API is even faster, see the Travis logs.
+
 ```
 goos: darwin
 goarch: amd64
