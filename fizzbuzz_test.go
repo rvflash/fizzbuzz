@@ -42,111 +42,119 @@ func BenchmarkG_Three(b *testing.B) {
 	}
 }
 
+// 2000000 - 730 ns/op
+func BenchmarkG_Bulk20(b *testing.B) {
+	fb := fizzbuzz.Default
+	_ = fb.Use(fizzbuzz.ModeOne)
+	// runs the Bulk function b.N times with 20 as value.
+	for n := 0; n < b.N; n++ {
+		_ = fb.Bulk(20)
+	}
+}
+
+// 2000000 - 773 ns/op
+func BenchmarkG_BulkTwo20(b *testing.B) {
+	fb := fizzbuzz.Default
+	_ = fb.Use(fizzbuzz.ModeTwo)
+	// runs the Bulk function b.N times with 20 as value.
+	for n := 0; n < b.N; n++ {
+		_ = fb.Bulk(20)
+	}
+}
+
+// 2000000 - 881 ns/op
+func BenchmarkG_BulkThree20(b *testing.B) {
+	fb := fizzbuzz.Default
+	_ = fb.Use(fizzbuzz.ModeThree)
+	// runs the Bulk function b.N times with 20 as value.
+	for n := 0; n < b.N; n++ {
+		_ = fb.Bulk(20)
+	}
+}
+
+// 300000 - 3480 ns/op
+func BenchmarkG_Bulk100(b *testing.B) {
+	fb := fizzbuzz.Default
+	_ = fb.Use(fizzbuzz.ModeOne)
+	// runs the Bulk function b.N times with 20 as value.
+	for n := 0; n < b.N; n++ {
+		_ = fb.Bulk(100)
+	}
+}
+
+// 500000 - 4104 ns/op
+func BenchmarkG_BulkTwo100(b *testing.B) {
+	fb := fizzbuzz.Default
+	_ = fb.Use(fizzbuzz.ModeTwo)
+	// runs the Bulk function b.N times with 20 as value.
+	for n := 0; n < b.N; n++ {
+		_ = fb.Bulk(100)
+	}
+}
+
+// 300000 - 4186 ns/op
+func BenchmarkG_BulkThree100(b *testing.B) {
+	fb := fizzbuzz.Default
+	_ = fb.Use(fizzbuzz.ModeThree)
+	// runs the Bulk function b.N times with 20 as value.
+	for n := 0; n < b.N; n++ {
+		_ = fb.Bulk(100)
+	}
+}
+
 func ExampleG_Bulk() {
 	fb := fizzbuzz.Default
 	fmt.Println(fb.Bulk(15))
 	// output: [1 2 fizz 4 buzz fizz 7 8 fizz buzz 11 fizz 13 14 fizzbuzz]
 }
 
-// 2000000 - 730 ns/op
-func BenchmarkG_Bulk20(b *testing.B) {
-	// runs the Bulk function b.N times with 20 as value.
-	for n := 0; n < b.N; n++ {
-		_ = fizzbuzz.Default.Bulk(20)
-	}
-}
-
-// 2000000 - 773 ns/op
-func BenchmarkG_BulkTwo20(b *testing.B) {
-	// runs the Bulk function b.N times with 20 as value.
-	for n := 0; n < b.N; n++ {
-		_ = fizzbuzz.Default.BulkTwo(20)
-	}
-}
-
-// 2000000 - 881 ns/op
-func BenchmarkG_BulkThree20(b *testing.B) {
-	// runs the Bulk function b.N times with 20 as value.
-	for n := 0; n < b.N; n++ {
-		_ = fizzbuzz.Default.BulkThree(20)
-	}
-}
-
-// 300000 - 3480 ns/op
-func BenchmarkG_Bulk100(b *testing.B) {
-	// runs the Bulk function b.N times with 20 as value.
-	for n := 0; n < b.N; n++ {
-		_ = fizzbuzz.Default.Bulk(100)
-	}
-}
-
-// 500000 - 4104 ns/op
-func BenchmarkG_BulkTwo100(b *testing.B) {
-	// runs the Bulk function b.N times with 20 as value.
-	for n := 0; n < b.N; n++ {
-		_ = fizzbuzz.Default.BulkTwo(100)
-	}
-}
-
-// 300000 - 4186 ns/op
-func BenchmarkG_BulkThree100(b *testing.B) {
-	// runs the Bulk function b.N times with 20 as value.
-	for n := 0; n < b.N; n++ {
-		_ = fizzbuzz.Default.BulkThree(100)
-	}
-}
-
 // Expected result of the first fifteen values with the default fizzbuzz behavior.
 var exp = []string{"1", "2", "fizz", "4", "buzz", "fizz", "7", "8", "fizz", "buzz", "11", "fizz", "13", "14", "fizzbuzz"}
 
+func newFizzBuzz(m fizzbuzz.Mode) (*fizzbuzz.G, error) {
+	fb, err := fizzbuzz.Custom("fizz", "buzz", 3, 5)
+	if err != nil {
+		return nil, err
+	}
+	if err := fb.Use(m); err != nil {
+		return nil, err
+	}
+	return fb, nil
+}
+
 func TestG_Bulk(t *testing.T) {
-	// The first fifteen values with the default fizzbuzz behavior.
-	d := fizzbuzz.Default.Bulk(15)
-	// Checks it!
-	if !reflect.DeepEqual(d, exp) {
-		t.Fatalf("unexpected result\ngot=%q\nexp=%q\n", d, exp)
+	// By methods
+	one, err := newFizzBuzz(fizzbuzz.ModeOne)
+	if err != nil {
+		t.Fatal(err)
+	}
+	two, err := newFizzBuzz(fizzbuzz.ModeTwo)
+	if err != nil {
+		t.Fatal(err)
+	}
+	three, err := newFizzBuzz(fizzbuzz.ModeThree)
+	if err != nil {
+		t.Fatal(err)
+	}
+	// Test all the algorithms.
+	var dt = []struct {
+		in  *fizzbuzz.G
+		out []string
+	}{
+		{in: one, out: exp},
+		{in: two, out: exp},
+		{in: three, out: exp},
+	}
+	for i, tt := range dt {
+		if out := tt.in.Bulk(15); !reflect.DeepEqual(out, tt.out) {
+			t.Errorf("%d. mismatch content:\ngot=%q\nexp=%q", i, out, tt.out)
+		}
 	}
 }
 
 func TestG_Bulk2(t *testing.T) {
 	// Expected nil with value inferior to one.
 	d := fizzbuzz.Default.Bulk(-1)
-	// Checks it!
-	if len(d) != 0 {
-		t.Fatalf("expected nothing: got=%q\n", d)
-	}
-}
-
-func TestG_BulkTwo(t *testing.T) {
-	// The first fifteen values with the default fizzbuzz behavior.
-	d := fizzbuzz.Default.BulkTwo(15)
-	// Checks it!
-	if !reflect.DeepEqual(d, exp) {
-		t.Fatalf("unexpected result\ngot=%q\nexp=%q\n", d, exp)
-	}
-}
-
-func TestG_BulkTwo2(t *testing.T) {
-	// Expected nil with value inferior to one.
-	d := fizzbuzz.Default.BulkTwo(-1)
-	// Checks it!
-	if len(d) != 0 {
-		t.Fatalf("expected nothing: got=%q\n", d)
-	}
-}
-
-func TestG_BulkThree(t *testing.T) {
-	// The first fifteen values with the default fizzbuzz behavior.
-	d := fizzbuzz.Default.BulkThree(15)
-	// Checks it!
-	if !reflect.DeepEqual(d, exp) {
-		t.Fatalf("unexpected result\ngot=%q\nexp=%q\n", d, exp)
-	}
-}
-
-func TestG_BulkThree2(t *testing.T) {
-	// Expected nil with value inferior to one.
-	d := fizzbuzz.Default.BulkThree(-1)
 	// Checks it!
 	if len(d) != 0 {
 		t.Fatalf("expected nothing: got=%q\n", d)
@@ -191,6 +199,25 @@ func TestCustom2(t *testing.T) {
 	for i, tt := range dt {
 		if _, err := fizzbuzz.Custom(tt.s1, tt.s2, tt.m1, tt.m2); err != tt.err {
 			t.Errorf("%d. mismatch content: got=%q, exp=%q", i, err, tt.err)
+		}
+	}
+}
+
+func TestG_Use(t *testing.T) {
+	var dt = []struct {
+		in  fizzbuzz.Mode
+		err error
+	}{
+		{err: fizzbuzz.ErrMode},
+		{in: fizzbuzz.ModeOne},
+		{in: fizzbuzz.ModeTwo},
+		{in: fizzbuzz.ModeThree},
+		{in: 4, err: fizzbuzz.ErrMode},
+	}
+	// Checks it!
+	for i, tt := range dt {
+		if err := fizzbuzz.Default.Use(tt.in); err != tt.err {
+			t.Errorf("%d. mismatch result: got=%q, exp=%q", i, err, tt.err)
 		}
 	}
 }
